@@ -436,8 +436,29 @@
             100% { opacity: 0.3; transform: scale(0.8); }
         }
         
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-overlay); z-index: 1000; overflow-y: auto; }
-        .modal-content { background: var(--modal-bg); margin: 20px; border-radius: 20px; padding: 20px; max-height: 85vh; overflow-y: auto; position: relative; }
+        /* Модальные окна — центрирование */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--modal-overlay);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .modal-content {
+            background: var(--modal-bg);
+            margin: 20px auto;
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 550px;
+            width: calc(100% - 40px);
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+        }
         .modal-header { 
             display: flex; 
             justify-content: space-between; 
@@ -449,22 +470,31 @@
             padding-right: 40px;
         }
         .modal-close-btn {
-            position: absolute;
+            position: sticky;
             top: 16px;
-            right: 16px;
-            background: none;
-            border: none;
-            font-size: 26px;
+            float: right;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            font-size: 20px;
             cursor: pointer;
             width: 36px;
             height: 36px;
-            box-shadow: none;
+            box-shadow: 0 2px 8px var(--shadow);
             color: var(--text-muted);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10;
+            z-index: 1100;
+            margin-bottom: 10px;
         }
+        /* Для очистки float */
+        .modal-content:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        
         .history-item { 
             border-bottom: 1px solid var(--border-color); 
             padding: 12px 0;
@@ -588,8 +618,6 @@
         /* Стили для корзины */
         .cart-modal .modal-content {
             max-width: 500px;
-            width: calc(100% - 40px);
-            margin: 20px auto;
         }
         .cart-item {
             display: flex;
@@ -687,6 +715,7 @@
             .info { padding-right: 40px; }
             .cart-qty-badge { top: 4px; right: 8px; font-size: 10px; padding: 1px 6px; }
             .price-step-btn { width: 38px; height: 38px; font-size: 16px; }
+            .modal-content { width: calc(100% - 30px); margin: 15px auto; }
         }
     </style>
 </head>
@@ -761,10 +790,10 @@
     <!-- Модалка корзины -->
     <div id="cartModal" class="modal cart-modal">
         <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeCartModal()">×</button>
             <div class="modal-header">
                 <span>🛒 Корзина</span>
             </div>
-            <button class="modal-close-btn" onclick="closeCartModal()">×</button>
             <div id="cart-items-list">
                 <div class="empty-cart">Корзина пуста</div>
             </div>
@@ -779,10 +808,10 @@
     <!-- Модалка правил -->
     <div id="rulesModal" class="modal">
         <div class="modal-content" style="max-width: 550px;">
+            <button class="modal-close-btn" onclick="closeRulesModal()">×</button>
             <div class="modal-header">
                 <span>📋 Правила для продавца</span>
             </div>
-            <button class="modal-close-btn" onclick="closeRulesModal()">×</button>
             
             <div class="rule-type-buttons">
                 <button class="rule-type-btn" data-type="type" onclick="selectRuleType('type')">📦 По типу</button>
@@ -806,10 +835,10 @@
     <!-- Модалка истории -->
     <div id="historyModal" class="modal">
         <div class="modal-content" style="max-width: 550px;">
+            <button class="modal-close-btn" onclick="closeHistory()">×</button>
             <div class="modal-header">
                 <span>📜 История операций</span>
             </div>
-            <button class="modal-close-btn" onclick="closeHistory()">×</button>
             <div id="history-list">
                 <div class="loading">Загрузка истории...</div>
             </div>
@@ -1627,7 +1656,6 @@
                     div.textContent = opt.label;
                     div.onclick = (e) => {
                         e.stopPropagation();
-                        // Убираем активный класс у всех
                         document.querySelectorAll('.sort-option').forEach(optDiv => {
                             optDiv.classList.remove('active');
                         });
@@ -1894,7 +1922,6 @@
             currentSortBy = 'none';
             const sortTrigger = document.getElementById('sortByTrigger');
             if (sortTrigger) sortTrigger.textContent = 'Без сортировки';
-            // Сбрасываем активный класс в сортировке
             document.querySelectorAll('.sort-option').forEach(opt => {
                 opt.classList.remove('active');
             });
