@@ -537,29 +537,30 @@
             margin-left: 8px;
         }
         
-        /* Фильтры истории - компактная версия */
+        /* ========== ФИЛЬТРЫ ИСТОРИИ - КОМПАКТНАЯ ВЕРСИЯ ========== */
         .history-filters {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 16px;
-            padding: 12px 16px;
+            padding: 12px;
             background: var(--badge-bg);
             border-radius: 20px;
         }
         .history-filter-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
             align-items: center;
         }
-        .history-filter-group {
+        /* Простые кнопки — никаких лишних обёрток */
+        .filter-btn-group {
             display: flex;
             flex-wrap: wrap;
+            gap: 6px;
             align-items: center;
-            gap: 8px;
         }
-        .history-filter-label {
+        .filter-label {
             font-size: 13px;
             font-weight: 600;
             color: var(--text-secondary);
@@ -569,20 +570,11 @@
             border: 1px solid var(--border-color);
             white-space: nowrap;
         }
-        .history-filter-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            background: var(--card-bg);
-            padding: 4px 10px;
-            border-radius: 40px;
-            border: 1px solid var(--border-color);
-        }
-        .history-filter-btn {
-            padding: 5px 14px;
+        .filter-btn {
+            padding: 6px 16px;
             border-radius: 30px;
-            border: none;
-            background: transparent;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
             cursor: pointer;
             font-size: 13px;
             color: var(--text-primary);
@@ -590,61 +582,57 @@
             white-space: nowrap;
             font-weight: 500;
         }
-        /* Разная ширина для кнопок */
-        .history-filter-btn[data-method="all"],
-        .history-filter-btn[data-type="all"] {
-            padding: 5px 12px;
+        /* Кнопка "Все" — чуть уже */
+        .filter-btn-all {
+            padding: 6px 12px;
         }
-        .history-filter-btn[data-method="basket"],
-        .history-filter-btn[data-method="single"],
-        .history-filter-btn[data-type="sale"],
-        .history-filter-btn[data-type="return"] {
-            padding: 5px 18px;
+        /* Остальные кнопки — шире */
+        .filter-btn-wide {
+            padding: 6px 20px;
         }
-        .history-filter-btn:hover {
+        .filter-btn:hover {
             background: var(--badge-bg);
         }
-        .history-filter-btn.active {
+        .filter-btn.active {
             background: var(--btn-bg);
             color: white;
+            border-color: var(--btn-bg);
         }
-
-        /* Поля даты - компактные */
+        
+        /* Поля даты */
         .date-input {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 40px;
-            padding: 6px 14px;
+            border-radius: 30px;
+            padding: 6px 12px;
             font-size: 13px;
             color: var(--text-primary);
             outline: none;
             cursor: pointer;
-            width: 155px;
+            width: 160px;
         }
         .date-input::-webkit-calendar-picker-indicator {
             filter: var(--calendar-icon-filter, none);
             cursor: pointer;
             opacity: 0.6;
-            margin-left: 6px;
         }
-
-        /* Фильтр по сумме - компактный */
-        .price-range-wrapper {
+        
+        /* Блок суммы */
+        .price-filter {
             display: flex;
             align-items: center;
             gap: 8px;
             background: var(--card-bg);
             padding: 4px 12px;
-            border-radius: 40px;
+            border-radius: 30px;
             border: 1px solid var(--border-color);
         }
-        .price-range-label {
+        .price-filter span {
             font-size: 13px;
-            font-weight: 600;
             color: var(--text-secondary);
-            white-space: nowrap;
+            font-weight: 500;
         }
-        .price-input {
+        .price-filter input {
             background: var(--badge-bg);
             border: none;
             border-radius: 30px;
@@ -655,13 +643,9 @@
             text-align: center;
             outline: none;
         }
-        .price-input::-webkit-inner-spin-button,
-        .price-input::-webkit-outer-spin-button {
+        .price-filter input::-webkit-inner-spin-button,
+        .price-filter input::-webkit-outer-spin-button {
             opacity: 0.5;
-        }
-        .price-range-wrapper span {
-            color: var(--text-muted);
-            font-size: 13px;
         }
         
         .login-card { background: var(--card-bg); border: 2px solid var(--border-color); }
@@ -859,8 +843,11 @@
             .price-step-btn { width: 38px; height: 38px; font-size: 16px; }
             .modal-content { width: calc(100% - 30px); margin: 15px auto; }
             .modal-close-btn { top: 10px; right: 12px; width: 32px; height: 32px; font-size: 18px; }
-            .custom-datetime input { width: 120px; }
-            .price-range-filter input { width: 55px; }
+            .date-input { width: 130px; font-size: 12px; padding: 5px 10px; }
+            .filter-btn { padding: 5px 12px; font-size: 12px; }
+            .filter-btn-all { padding: 5px 10px; }
+            .filter-btn-wide { padding: 5px 16px; }
+            .price-filter input { width: 55px; }
         }
     </style>
 </head>
@@ -986,32 +973,28 @@
             </div>
             <div class="history-filters">
                 <div class="history-filter-row">
-                    <div class="history-filter-group">
-                        <span class="history-filter-label">📦 Способ</span>
-                        <div class="history-filter-buttons">
-                            <button class="history-filter-btn" data-method="all" onclick="setHistoryMethodFilter('all')">Все</button>
-                            <button class="history-filter-btn" data-method="basket" onclick="setHistoryMethodFilter('basket')">Корзина</button>
-                            <button class="history-filter-btn" data-method="single" onclick="setHistoryMethodFilter('single')">Поштучно</button>
-                        </div>
+                    <div class="filter-btn-group">
+                        <span class="filter-label">📦 Способ</span>
+                        <button class="filter-btn filter-btn-all" data-method="all" onclick="setHistoryMethodFilter('all')">Все</button>
+                        <button class="filter-btn filter-btn-wide" data-method="basket" onclick="setHistoryMethodFilter('basket')">Корзина</button>
+                        <button class="filter-btn filter-btn-wide" data-method="single" onclick="setHistoryMethodFilter('single')">Поштучно</button>
                     </div>
-                    <div class="history-filter-group">
-                        <span class="history-filter-label">🔄 Тип</span>
-                        <div class="history-filter-buttons">
-                            <button class="history-filter-btn" data-type="all" onclick="setHistoryTypeFilter('all')">Все</button>
-                            <button class="history-filter-btn" data-type="sale" onclick="setHistoryTypeFilter('sale')">Продажи</button>
-                            <button class="history-filter-btn" data-type="return" onclick="setHistoryTypeFilter('return')">Возвраты</button>
-                        </div>
+                    <div class="filter-btn-group">
+                        <span class="filter-label">🔄 Тип</span>
+                        <button class="filter-btn filter-btn-all" data-type="all" onclick="setHistoryTypeFilter('all')">Все</button>
+                        <button class="filter-btn filter-btn-wide" data-type="sale" onclick="setHistoryTypeFilter('sale')">Продажи</button>
+                        <button class="filter-btn filter-btn-wide" data-type="return" onclick="setHistoryTypeFilter('return')">Возвраты</button>
                     </div>
                 </div>
                 <div class="history-filter-row">
                     <input type="datetime-local" id="historyDateTimeFrom" class="date-input" step="60">
                     <span style="color: var(--text-muted);">—</span>
                     <input type="datetime-local" id="historyDateTimeTo" class="date-input" step="60">
-                    <div class="price-range-wrapper">
-                        <span class="price-range-label">💰 Сумма</span>
-                        <input type="number" id="historyMinPrice" class="price-input" placeholder="0" value="0" step="100">
+                    <div class="price-filter">
+                        <span>💰</span>
+                        <input type="number" id="historyMinPrice" placeholder="0" value="0" step="100">
                         <span>—</span>
-                        <input type="number" id="historyMaxPrice" class="price-input" placeholder="∞" step="100">
+                        <input type="number" id="historyMaxPrice" placeholder="∞" step="100">
                     </div>
                 </div>
             </div>
@@ -1051,8 +1034,8 @@
         
         // ========== ИСТОРИЯ ==========
         let salesHistory = [];
-        let historyMethodFilter = "all"; // all, basket, single
-        let historyTypeFilter = "all";   // all, sale, return
+        let historyMethodFilter = "all";
+        let historyTypeFilter = "all";
 
         function loadHistory() {
             const saved = localStorage.getItem('merch_sales_history');
@@ -1072,7 +1055,7 @@
                 date: new Date().toISOString(),
                 items: items.map(item => ({ name: item.name, qty: item.qty, price: item.price })),
                 total: total,
-                method: method, // 'basket' или 'single'
+                method: method,
                 isReturn: isReturn
             };
             salesHistory.unshift(entry);
@@ -1120,21 +1103,18 @@
     
             let filtered = [...salesHistory];
     
-            // Фильтр по способу (корзина/поштучно)
             if (historyMethodFilter === 'basket') {
                 filtered = filtered.filter(e => e.method === 'basket');
             } else if (historyMethodFilter === 'single') {
                 filtered = filtered.filter(e => e.method === 'single');
             }
     
-            // Фильтр по типу (продажа/возврат)
             if (historyTypeFilter === 'sale') {
                 filtered = filtered.filter(e => !e.isReturn);
             } else if (historyTypeFilter === 'return') {
                 filtered = filtered.filter(e => e.isReturn === true);
             }
     
-            // Фильтр по дате и времени
             if (dateTimeFrom) {
                 const fromDate = new Date(dateTimeFrom);
                 filtered = filtered.filter(e => new Date(e.date) >= fromDate);
@@ -1144,7 +1124,6 @@
                 filtered = filtered.filter(e => new Date(e.date) <= toDate);
             }
     
-            // Фильтр по диапазону цен
             filtered = filtered.filter(e => e.total >= minPrice && e.total <= maxPrice);
     
             if (filtered.length === 0) {
@@ -1155,7 +1134,7 @@
             let html = '';
             for (const entry of filtered) {
                 const date = new Date(entry.date);
-                const dateStr = date.toLocaleString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+                const dateStr = date.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
                 const isBasket = entry.method === 'basket';
                 const isReturn = entry.isReturn;
         
