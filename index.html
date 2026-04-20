@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>🍌 Бананчики — учёт мерча</title>
+    <title>🍌 Бананчики 🍌</title>
     <style>
         * {
             box-sizing: border-box;
@@ -592,7 +592,7 @@
         }
         body.dark .history-badge-method-single {
             background: rgba(155, 89, 182, 0.4);
-            olor: white;
+            color: white;
         }
         body.dark .history-badge-type-sale {
             background: rgba(46, 204, 113, 0.4); 
@@ -652,14 +652,17 @@
             color: var(--text-primary);
             transition: all 0.2s;
             white-space: nowrap;
-            padding-left: 12px;
+            padding: 0 12px;
             margin: 0;
             height: 30px;
             width: 90px;
             display: inline-flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
             font-family: inherit;
             box-sizing: border-box;
+            line-height: 1;
         }
         .history-filter-btn-small {
             min-width: 52px;
@@ -1009,9 +1012,9 @@
             .modal-content { width: calc(100% - 30px); margin: 15px auto; }
             .modal-close-btn { top: 8px; right: 12px; width: 32px; height: 32px; font-size: 18px; }
             .history-date-input { width: 140px; font-size: 12px; padding: 5px 10px; height: 32px; }
-            .history-filter-btn { padding: 4 12px; font-size: 12px; height: 32px; line-height: 32px; }
-            .history-filter-btn-small { padding: 4 10px; }
-            .history-filter-btn-large { padding: 0 16px; }
+            .history-filter-btn { padding: 0 12px; font-size: 12px; height: 34px; }
+            .history-filter-btn-small { min-width: 55px; }
+            .history-filter-btn-large { min-width: 90px; }
             .history-price-filter input { width: 65px; }
             .history-price-filter { padding: 2px 10px; gap: 5px; height: 32px; }
             .history-filter-reset { padding: 0 20px; height: 32px; font-size: 12px; }
@@ -1060,6 +1063,7 @@
             <button class="refresh-btn" onclick="loadData(true, true)">🔄 Обновить</button>
             <button class="refresh-btn" id="rulesButton" style="background: var(--btn-bg);">📋 Правила</button>
             <button class="history-btn" onclick="showHistory()">📜 История</button>
+            <button class="refresh-btn" onclick="manualSyncHistory()" style="background: var(--btn-bg);">🔄 Синхр. историю</button>
         </div>
         
         <div id="progressContainer" class="progress-container">
@@ -1164,7 +1168,6 @@
                 </div>
                 <div class="history-filter-bottom">
                     <div class="history-filter-left">
-                        <!-- Строка "с" -->
                         <div class="custom-datetime" id="datetimeFromContainer">
                             <span class="datetime-label">с</span>
                             <div class="datetime-group">
@@ -1182,7 +1185,6 @@
                         </div>
                     </div>
                     <div class="history-filter-left" style="margin-top: 8px;">
-                        <!-- Строка "по" -->
                         <div class="custom-datetime" id="datetimeToContainer">
                             <span class="datetime-label">по</span>
                             <div class="datetime-group">
@@ -1218,7 +1220,7 @@
     </div>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbw-QMM6PtyGZiUMcbWi8nJnfNTyGtDMVbNQ1ftKXLEi2jrc_IB0Y-TziVm4M7DaQ7-exw/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbw0e1ztZ6FAKR9yhActsz14sObH583BV4elyGOgGaxYNlcMfC8rI9m6OKW39-rCsFFWXw/exec";
         const CORRECT_PASSWORD = "банан";
         
         let originalCardsData = [];
@@ -1245,22 +1247,61 @@
             return typeColors.get(type);
         }
         
-        // ========== ИСТОРИЯ ==========
+        // ========== ИСТОРИЯ С СИНХРОНИЗАЦИЕЙ ==========
         let salesHistory = [];
         let historyMethodFilter = "all";
         let historyTypeFilter = "all";
 
-        function loadHistory() {
-            const saved = localStorage.getItem('merch_sales_history');
-            if (saved) {
-                salesHistory = JSON.parse(saved);
-            } else {
-                salesHistory = [];
+        async function syncHistoryToServer() {
+            try {
+                await fetch(`${API_URL}?action=syncHistory&t=${Date.now()}`, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ history: salesHistory })
+                });
+                console.log('История синхронизирована с сервером');
+            } catch (error) {
+                console.error('Ошибка синхронизации истории:', error);
+            }
+        }
+
+        async function loadHistoryFromServer() {
+            try {
+                const response = await fetch(`${API_URL}?action=getFullHistory&t=${Date.now()}`);
+                const data = await response.json();
+                if (data && data.history) {
+                    salesHistory = data.history;
+                    saveHistoryToLocal();
+                    renderHistoryList();
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                console.error('Ошибка загрузки истории с сервера:', error);
+                return false;
+            }
+        }
+
+        function saveHistoryToLocal() {
+            localStorage.setItem('merch_sales_history', JSON.stringify(salesHistory));
+        }
+
+        async function loadHistory() {
+            const loaded = await loadHistoryFromServer();
+            if (!loaded) {
+                const saved = localStorage.getItem('merch_sales_history');
+                if (saved) {
+                    salesHistory = JSON.parse(saved);
+                } else {
+                    salesHistory = [];
+                }
             }
         }
 
         function saveHistory() {
-            localStorage.setItem('merch_sales_history', JSON.stringify(salesHistory));
+            saveHistoryToLocal();
+            syncHistoryToServer();
         }
 
         function addToHistory(items, total, method, isReturn = false) {
@@ -1275,6 +1316,7 @@
             salesHistory.unshift(entry);
             if (salesHistory.length > 200) salesHistory = salesHistory.slice(0, 200);
             saveHistory();
+            renderHistoryList();
         }
 
         function addSingleSaleToHistory(name, qty, price, isReturn = false) {
@@ -1306,18 +1348,21 @@
             renderHistoryList();
         }
 
-        // Инициализация кастомных полей даты и времени
+        async function manualSyncHistory() {
+            showToast("Синхронизация истории...", true);
+            await loadHistoryFromServer();
+            renderHistoryList();
+            showToast("История синхронизирована!", true);
+        }
+
         function initDateTimeSelects() {
             const currentYear = new Date().getFullYear();
             const years = [];
-            for (let i = currentYear - 2; i <= currentYear + 2; i++) {
-                years.push(i);
-            }
+            for (let i = currentYear - 2; i <= currentYear + 2; i++) years.push(i);
             
             const monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 
                                 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
             
-            // Заполняем дни (1-31)
             const daySelects = ['dateFromDay', 'dateToDay'];
             for (const selectId of daySelects) {
                 const select = document.getElementById(selectId);
@@ -1332,7 +1377,6 @@
                 }
             }
             
-            // Заполняем месяцы (1-12) с названиями
             const monthSelects = ['dateFromMonth', 'dateToMonth'];
             for (const selectId of monthSelects) {
                 const select = document.getElementById(selectId);
@@ -1347,7 +1391,6 @@
                 }
             }
             
-            // Заполняем года
             const yearSelects = ['dateFromYear', 'dateToYear'];
             for (const selectId of yearSelects) {
                 const select = document.getElementById(selectId);
@@ -1362,7 +1405,6 @@
                 }
             }
             
-            // Заполняем часы (0-23)
             const hourSelects = ['timeFromHour', 'timeToHour'];
             for (const selectId of hourSelects) {
                 const select = document.getElementById(selectId);
@@ -1377,7 +1419,6 @@
                 }
             }
             
-            // Заполняем минуты (0-59)
             const minuteSelects = ['timeFromMinute', 'timeToMinute'];
             for (const selectId of minuteSelects) {
                 const select = document.getElementById(selectId);
@@ -1393,7 +1434,6 @@
             }
         }
 
-        // Функция получения даты из кастомных селектов
         function getDateTimeFromSelects(prefix) {
             const day = document.getElementById(`${prefix}Day`)?.value;
             const month = document.getElementById(`${prefix}Month`)?.value;
@@ -1421,7 +1461,6 @@
             const currentMonth = now.getMonth() + 1;
             const currentDay = now.getDate();
             
-            // Сброс селектов "с"
             const fromDay = document.getElementById('dateFromDay');
             const fromMonth = document.getElementById('dateFromMonth');
             const fromYear = document.getElementById('dateFromYear');
@@ -1433,7 +1472,6 @@
             if (fromHour) fromHour.value = 0;
             if (fromMinute) fromMinute.value = 0;
             
-            // Сброс селектов "по"
             const toDay = document.getElementById('dateToDay');
             const toMonth = document.getElementById('dateToMonth');
             const toYear = document.getElementById('dateToYear');
@@ -1477,7 +1515,6 @@
             const container = document.getElementById('history-list');
             if (!container) return;
     
-            // Получаем даты из кастомных селектов
             const fromDate = getDateTimeFromSelects('dateFrom');
             const toDate = getDateTimeFromSelects('dateTo');
             const minPrice = parseInt(document.getElementById('historyMinPrice')?.value) || 0;
@@ -1497,13 +1534,8 @@
                 filtered = filtered.filter(e => e.isReturn === true);
             }
     
-            if (fromDate) {
-                filtered = filtered.filter(e => new Date(e.date) >= fromDate);
-            }
-            if (toDate) {
-                filtered = filtered.filter(e => new Date(e.date) <= toDate);
-            }
-    
+            if (fromDate) filtered = filtered.filter(e => new Date(e.date) >= fromDate);
+            if (toDate) filtered = filtered.filter(e => new Date(e.date) <= toDate);
             filtered = filtered.filter(e => e.total >= minPrice && e.total <= maxPrice);
     
             if (filtered.length === 0) {
@@ -1892,9 +1924,7 @@
                 const minusBtn = card.querySelector('.minus');
                 if (minusBtn) {
                     const idx = parseInt(minusBtn.dataset.index);
-                    
                     let badge = card.querySelector('.cart-qty-badge');
-                    
                     if (cart.hasOwnProperty(idx) && cart[idx] > 0) {
                         const qtyInCart = cart[idx];
                         if (!badge) {
@@ -2008,13 +2038,11 @@
             if (!card) return;
             const currentQty = cart[index] || 0;
             const newQty = currentQty + delta;
-            
             if (newQty < 0) return;
             if (newQty > card.stock) {
                 showToast(`Нельзя добавить больше, чем есть (${card.stock} шт)`, false);
                 return;
             }
-            
             cart[index] = newQty;
             updateCartUI();
         }
@@ -2059,7 +2087,6 @@
             updateCartBadges();
             
             if (!silent) {
-                const isReturn = delta === 1;
                 if (delta === -1) {
                     addSingleSaleToHistory(card.name, 1, card.price, false);
                     showToast(`Продажа: ${card.name} -1 шт`, true);
@@ -2130,7 +2157,6 @@
                     const revenue = sold * card.price;
                     const revenueSpan = targetCard.querySelector('.revenue');
                     if (revenueSpan) revenueSpan.textContent = `📊 Выручка: ${revenue} ₽`;
-                    
                     if (newStock === 0) {
                         targetCard.classList.add('out-of-stock');
                     } else {
@@ -2298,15 +2324,11 @@
                 sortOptions.forEach(opt => {
                     const div = document.createElement('div');
                     div.className = 'sort-option';
-                    if (currentSortBy === opt.value) {
-                        div.classList.add('active');
-                    }
+                    if (currentSortBy === opt.value) div.classList.add('active');
                     div.textContent = opt.label;
                     div.onclick = (e) => {
                         e.stopPropagation();
-                        document.querySelectorAll('.sort-option').forEach(optDiv => {
-                            optDiv.classList.remove('active');
-                        });
+                        document.querySelectorAll('.sort-option').forEach(optDiv => optDiv.classList.remove('active'));
                         div.classList.add('active');
                         currentSortBy = opt.value;
                         sortTrigger.textContent = opt.label;
@@ -2326,18 +2348,14 @@
             initSortSelect();
             const typeTrigger = document.getElementById('typeFilterTrigger');
             const typeDropdown = document.getElementById('typeFilterDropdown');
-            function closeTypeDropdown() { 
-                typeDropdown.classList.remove('show'); 
-            }
+            function closeTypeDropdown() { typeDropdown.classList.remove('show'); }
             typeTrigger.onclick = (e) => { 
                 e.stopPropagation(); 
                 typeDropdown.classList.toggle('show');
                 buildTypeMultiSelect();
             };
             document.addEventListener('click', (e) => {
-                if (!typeTrigger.contains(e.target) && !typeDropdown.contains(e.target)) {
-                    closeTypeDropdown();
-                }
+                if (!typeTrigger.contains(e.target) && !typeDropdown.contains(e.target)) closeTypeDropdown();
             });
         }
         
@@ -2515,7 +2533,7 @@
         function showHistory() {
             const modal = document.getElementById('historyModal');
             if (modal) {
-                resetHistoryFilters(); // Добавьте эту строку
+                resetHistoryFilters();
                 renderHistoryList();
                 modal.style.display = 'block';
             }
@@ -2538,7 +2556,6 @@
             if (event.target === document.getElementById('rulesModal')) closeRulesModal();
         }
         
-        // Добавляем слушатели для обновления истории при изменении дат
         function bindDateTimeEvents() {
             const selectIds = ['dateFromDay', 'dateFromMonth', 'dateFromYear', 'timeFromHour', 'timeFromMinute', 
                                'dateToDay', 'dateToMonth', 'dateToYear', 'timeToHour', 'timeToMinute'];
@@ -2562,9 +2579,7 @@
             currentSortBy = 'none';
             const sortTrigger = document.getElementById('sortByTrigger');
             if (sortTrigger) sortTrigger.textContent = 'Без сортировки';
-            document.querySelectorAll('.sort-option').forEach(opt => {
-                opt.classList.remove('active');
-            });
+            document.querySelectorAll('.sort-option').forEach(opt => opt.classList.remove('active'));
             filterAndSort();
         }
         
