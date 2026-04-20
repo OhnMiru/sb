@@ -1127,8 +1127,6 @@
                                 <select id="dateFromDay" class="datetime-select"></select>
                                 <span class="datetime-sep">.</span>
                                 <select id="dateFromMonth" class="datetime-select"></select>
-                                <span class="datetime-sep">.</span>
-                                <select id="dateFromYear" class="datetime-select"></select>
                             </div>
                             <div class="datetime-group">
                                 <select id="timeFromHour" class="datetime-select"></select>
@@ -1143,8 +1141,6 @@
                                 <select id="dateToDay" class="datetime-select"></select>
                                 <span class="datetime-sep">.</span>
                                 <select id="dateToMonth" class="datetime-select"></select>
-                                <span class="datetime-sep">.</span>
-                                <select id="dateToYear" class="datetime-select"></select>
                             </div>
                             <div class="datetime-group">
                                 <select id="timeToHour" class="datetime-select"></select>
@@ -1292,23 +1288,6 @@
                 }
             }
             
-            // Заполняем годы (2020-2030)
-            const yearSelects = ['dateFromYear', 'dateToYear'];
-            const currentYear = new Date().getFullYear();
-            for (const selectId of yearSelects) {
-                const select = document.getElementById(selectId);
-                if (select) {
-                    select.innerHTML = '';
-                    for (let i = currentYear - 2; i <= currentYear + 2; i++) {
-                        const option = document.createElement('option');
-                        option.value = i;
-                        option.textContent = i;
-                        if (i === currentYear) option.selected = true;
-                        select.appendChild(option);
-                    }
-                }
-            }
-            
             // Заполняем часы (0-23)
             const hourSelects = ['timeFromHour', 'timeToHour'];
             for (const selectId of hourSelects) {
@@ -1344,12 +1323,12 @@
         function getDateTimeFromSelects(prefix) {
             const day = document.getElementById(`${prefix}Day`)?.value;
             const month = document.getElementById(`${prefix}Month`)?.value;
-            const year = document.getElementById(`${prefix}Year`)?.value;
             const hour = document.getElementById(`time${prefix === 'dateFrom' ? 'From' : 'To'}Hour`)?.value;
             const minute = document.getElementById(`time${prefix === 'dateFrom' ? 'From' : 'To'}Minute`)?.value;
+            const currentYear = new Date().getFullYear();
             
-            if (day && month && year && hour && minute) {
-                return new Date(year, month - 1, day, hour, minute);
+            if (day && month && hour && minute) {
+                return new Date(currentYear, month - 1, day, hour, minute);
             }
             return null;
         }
@@ -1365,31 +1344,26 @@
             
             // Сбрасываем даты в селектах на текущие значения по умолчанию
             const now = new Date();
-            const currentYear = now.getFullYear();
             const currentMonth = now.getMonth() + 1;
             const currentDay = now.getDate();
             
             // Сброс селектов "с"
             const fromDay = document.getElementById('dateFromDay');
             const fromMonth = document.getElementById('dateFromMonth');
-            const fromYear = document.getElementById('dateFromYear');
             const fromHour = document.getElementById('timeFromHour');
             const fromMinute = document.getElementById('timeFromMinute');
             if (fromDay) fromDay.value = currentDay;
             if (fromMonth) fromMonth.value = currentMonth;
-            if (fromYear) fromYear.value = currentYear;
             if (fromHour) fromHour.value = 0;
             if (fromMinute) fromMinute.value = 0;
             
             // Сброс селектов "по"
             const toDay = document.getElementById('dateToDay');
             const toMonth = document.getElementById('dateToMonth');
-            const toYear = document.getElementById('dateToYear');
             const toHour = document.getElementById('timeToHour');
             const toMinute = document.getElementById('timeToMinute');
             if (toDay) toDay.value = currentDay;
             if (toMonth) toMonth.value = currentMonth;
-            if (toYear) toYear.value = currentYear;
             if (toHour) toHour.value = 23;
             if (toMinute) toMinute.value = 59;
             
