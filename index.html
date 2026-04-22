@@ -1657,8 +1657,9 @@
         .discount-section {
             background: var(--badge-bg);
             border-radius: 16px;
-            padding: 6px 12px;
             margin-bottom: 16px;
+            border-left: 4px solid var(--btn-bg);
+            overflow: hidden;
         }
 
         .discount-header {
@@ -1666,35 +1667,34 @@
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            padding: 2px 0;
+            padding: 6px 12px;
         }
 
         .discount-title {
             font-weight: bold;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--badge-text);
         }
 
         .discount-chevron {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--badge-text);
             transition: transform 0.2s;
         }
 
         .discount-content {
-            margin-top: 10px;
-            padding-bottom: 4px;
+            padding: 0 12px 8px 12px;
         }
 
         .discount-group {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .discount-group-title {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
             color: var(--badge-text);
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
 
         .discount-row {
@@ -1713,8 +1713,8 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 30px;
-            padding: 6px 12px;
-            font-size: 13px;
+            padding: 5px 10px;
+            font-size: 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -1736,7 +1736,7 @@
             right: 0;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
+            border-radius: 12px;
             z-index: 1000;
             display: none;
             margin-top: 4px;
@@ -1748,9 +1748,9 @@
         }
 
         .discount-select-option {
-            padding: 8px 12px;
+            padding: 6px 10px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-primary);
         }
 
@@ -1767,23 +1767,23 @@
 
         .discount-amount-input {
             flex: 1;
-            padding: 6px 8px;
+            padding: 5px 8px;
             border: 1px solid var(--border-color);
             border-radius: 30px;
             background: var(--card-bg);
             color: var(--text-primary);
-            font-size: 13px;
+            font-size: 12px;
             text-align: center;
-            min-width: 80px;
+            min-width: 70px;
         }
 
         .discount-step-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 16px;
+            width: 28px;
+            height: 28px;
+            border-radius: 14px;
             background: var(--btn-bg);
             border: none;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
             color: white;
@@ -1799,20 +1799,20 @@
         .discount-buttons-row {
             display: flex;
             gap: 8px;
-            margin-top: 4px;
+            margin-top: 8px;
         }
 
         .discount-action-btn {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 30px;
-            padding: 6px 8px;
-            font-size: 12px;
+            padding: 5px 8px;
+            font-size: 11px;
             cursor: pointer;
             color: var(--text-primary);
             text-align: center;
             transition: all 0.2s;
-            height: 34px;
+            height: 30px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -1824,12 +1824,12 @@
 
         .discount-action-btn.apply-btn {
             flex: 1;
-            max-width: 100px;
+            max-width: 90px;
         }
 
         .discount-action-btn.cancel-btn {
             flex: 1;
-            max-width: 100px;
+            max-width: 90px;
         }
 
         .discount-action-btn.reset-btn {
@@ -1840,13 +1840,13 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 30px;
-            padding: 6px 20px;
-            font-size: 12px;
+            padding: 5px 16px;
+            font-size: 11px;
             cursor: pointer;
             color: var(--text-primary);
             text-align: center;
             white-space: nowrap;
-            height: 34px;
+            height: 30px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -1860,7 +1860,7 @@
             max-height: 150px;
             overflow-y: auto;
             border: 1px solid var(--border-color);
-            border-radius: 16px;
+            border-radius: 12px;
             margin-top: 8px;
             background: var(--card-bg);
         }
@@ -1868,10 +1868,10 @@
         .product-select-item {
             display: flex;
             align-items: center;
-            padding: 8px 12px;
+            padding: 6px 10px;
             cursor: pointer;
             border-bottom: 1px solid var(--border-color);
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .product-select-item:last-child {
@@ -2189,9 +2189,9 @@
             <div class="modal-header">
                 <span>🛒 Корзина</span>
             </div>
-            <div id="discount-panel" class="discount-section"></div>
+            <div id="discount-panel" class="discount-section" style="display: none;"></div>
             <div id="cart-items-list">
-                <div class="empty-cart">Корзина пуста</div>
+                <div class="empty-cart">🍌 Корзина пуста</div>
             </div>
             <div id="cart-total" class="cart-total" style="display:none;">Итого: 0 ₽</div>
             <div class="cart-actions" id="cart-actions" style="display:none;">
@@ -2354,8 +2354,8 @@
         let typeOptions = [];
 
         let cartDiscount = {
-            type: 'percent',
-            value: 10
+            type: 'none',
+            value: 0
         };
         let selectedDiscountProducts = new Set();
         let discountProductListVisible = false;
@@ -2464,20 +2464,23 @@
                 if (type === 'percent') {
                     valueInput.placeholder = '%';
                     valueInput.step = 1;
-                    if (cartDiscount.value === 0) cartDiscount.value = 10;
-                } else {
+                } else if (type === 'fixed') {
                     valueInput.placeholder = '₽';
                     valueInput.step = 100;
-                    if (cartDiscount.value === 0) cartDiscount.value = 500;
+                } else {
+                    valueInput.disabled = true;
+                    valueInput.value = 0;
                 }
-                valueInput.value = cartDiscount.value;
+                if (type !== 'none') {
+                    valueInput.disabled = false;
+                }
             }
             updateCartUI();
         }
 
         function changeDiscountValue(delta) {
             const input = document.getElementById('cartDiscountValue');
-            if (input) {
+            if (input && cartDiscount.type !== 'none') {
                 let val = parseFloat(input.value) || 0;
                 let step = (cartDiscount.type === 'percent') ? 1 : 100;
                 val = Math.max(0, val + delta * step);
@@ -2489,7 +2492,7 @@
 
         function updateCartDiscountFromInput() {
             const input = document.getElementById('cartDiscountValue');
-            if (input) {
+            if (input && cartDiscount.type !== 'none') {
                 cartDiscount.value = parseFloat(input.value) || 0;
                 updateCartUI();
             }
@@ -2497,19 +2500,18 @@
 
         function resetCartDiscount() {
             cartDiscount = {
-                type: 'percent',
-                value: 10
+                type: 'none',
+                value: 0
             };
             const trigger = document.getElementById('cartDiscountSelectTrigger');
-            if (trigger) trigger.textContent = '%';
+            if (trigger) trigger.textContent = 'Без скидки';
             const valueInput = document.getElementById('cartDiscountValue');
             if (valueInput) {
-                valueInput.value = 10;
-                valueInput.placeholder = '%';
-                valueInput.step = 1;
+                valueInput.value = 0;
+                valueInput.disabled = true;
             }
             updateCartUI();
-            showToast("Скидка на корзину сброшена до 10%", true);
+            showToast("Скидка на корзину сброшена", true);
         }
 
         // Кастомный селект для типа скидки на товары
@@ -2531,6 +2533,31 @@
             if (dropdown) dropdown.classList.remove('show');
         }
 
+        // Показываем только товары, которые есть в корзине
+        function renderProductDiscountList() {
+            const container = document.getElementById('productDiscountList');
+            if (!container) return;
+            const cartProductNames = new Set();
+            for (const [idxStr, qty] of Object.entries(cart)) {
+                if (qty > 0) {
+                    const idx = parseInt(idxStr);
+                    const card = originalCardsData[idx];
+                    if (card) cartProductNames.add(card.name);
+                }
+            }
+            let html = '<div class="product-select-list">';
+            originalCardsData.forEach(card => {
+                if (cartProductNames.has(card.name)) {
+                    const isSelected = selectedDiscountProducts.has(card.name);
+                    html += `<div class="product-select-item ${isSelected ? 'selected' : ''}" onclick="toggleProductSelectionForDiscount('${escapeHtml(card.name)}')">
+                                <span class="multi-select-item-label">${escapeHtml(card.name)}</span>${isSelected ? '<span class="product-select-check">✓</span>' : ''}
+                            </div>`;
+                }
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
         function toggleProductSelectionForDiscount(productName) {
             if (selectedDiscountProducts.has(productName)) {
                 selectedDiscountProducts.delete(productName);
@@ -2540,28 +2567,29 @@
             renderProductDiscountList();
         }
 
-        function renderProductDiscountList() {
-            const container = document.getElementById('productDiscountList');
-            if (!container) return;
-            let html = '<div class="product-select-list">';
-            originalCardsData.forEach(card => {
-                const isSelected = selectedDiscountProducts.has(card.name);
-                html += `<div class="product-select-item ${isSelected ? 'selected' : ''}" onclick="toggleProductSelectionForDiscount('${escapeHtml(card.name)}')">
-                            <span class="multi-select-item-label">${escapeHtml(card.name)}</span>${isSelected ? '<span class="product-select-check">✓</span>' : ''}
-                        </div>`;
-            });
-            html += '</div>';
-            container.innerHTML = html;
-        }
-
         function toggleDiscountProductsList() {
             discountProductListVisible = !discountProductListVisible;
             const container = document.getElementById('productDiscountList');
-            if (container) container.style.display = discountProductListVisible ? 'block' : 'none';
+            if (container) {
+                container.style.display = discountProductListVisible ? 'block' : 'none';
+            }
             if (discountProductListVisible) renderProductDiscountList();
         }
 
-        function applyItemDiscount() {
+        // Применение скидки (для всей корзины ИЛИ для выбранных товаров)
+        function applyDiscount() {
+            // Если есть скидка на всю корзину
+            if (cartDiscount.type !== 'none' && cartDiscount.value > 0) {
+                let discountText = cartDiscount.type === 'percent' 
+                    ? `${cartDiscount.value}%` 
+                    : `${cartDiscount.value} ₽`;
+                showToast(`Скидка ${discountText} применена ко всей корзине`, true);
+                closeDiscountPanel();
+                updateCartUI();
+                return;
+            }
+            
+            // Иначе применяем скидку на выбранные товары
             const typeSelect = document.getElementById('itemDiscountTypeSelect');
             const type = typeSelect ? typeSelect.getAttribute('data-value') || 'percent' : 'percent';
             const value = parseFloat(document.getElementById('itemDiscountValue').value) || 0;
@@ -3370,7 +3398,7 @@
             return activeRules;
         }
 
-        // ========== СТАТИСТИКА (ИСПРАВЛЕННАЯ) ==========
+        // ========== СТАТИСТИКА ==========
         function openStatsModal() {
             const modal = document.getElementById('statsModal');
             if (modal) {
@@ -3489,7 +3517,7 @@
                     ${productDetails.map(p => `<tr><td>${escapeHtml(p.name)}</td><td><span class="type-badge" style="background:${getTypeColor(p.type)}20; color:${getTypeColor(p.type)};">${escapeHtml(p.type)}</span></td><td class="text-right">${p.qty} шт</td><td class="text-right">${formatCurrency(p.revenue)}</td><td class="text-right">${formatCurrency(p.totalCost)}</td><td class="text-right ${p.profit >= 0 ? 'profit-positive' : 'profit-negative'}">${formatCurrency(p.profit)}</td><td class="text-right ${p.margin >= 0 ? 'profit-positive' : 'profit-negative'}">${formatPercent(p.margin)}</td></tr>`).join('')}
                 </tbody></table></div>
                 <div class="detail-section"><div class="detail-title">🏷️ Детализация по типам мерча</div><table class="detail-table"><thead><tr><th>Тип</th><th class="text-right">Кол-во</th><th class="text-right">Выручка</th><th class="text-right">Себест.</th><th class="text-right">Прибыль</th><th class="text-right">Рентаб.</th></tr></thead><tbody>
-                    ${typeDetails.map(t => `<tr><td><span class="type-badge" style="background:${getTypeColor(t.type)}20; color:${getTypeColor(t.type)};">${escapeHtml(t.type)}</span></td><td class="text-right">${t.qty} шт</td><td class="text-right">${formatCurrency(t.revenue)}</td><td class="text-right">${formatCurrency(t.totalCost)}</td><td class="text-right ${t.profit >= 0 ? 'profit-positive' : 'profit-negative'}">${formatCurrency(t.profit)}</td><td class="text-right ${t.margin >= 0 ? 'profit-positive' : 'profit-negative'}">${formatPercent(t.margin)}</td></tr>`).join('')}
+                    ${typeDetails.map(t => `<td><td><span class="type-badge" style="background:${getTypeColor(t.type)}20; color:${getTypeColor(t.type)};">${escapeHtml(t.type)}</span></td><td class="text-right">${t.qty} шт</td><td class="text-right">${formatCurrency(t.revenue)}</td><td class="text-right">${formatCurrency(t.totalCost)}</td><td class="text-right ${t.profit >= 0 ? 'profit-positive' : 'profit-negative'}">${formatCurrency(t.profit)}</td><td class="text-right ${t.margin >= 0 ? 'profit-positive' : 'profit-negative'}">${formatPercent(t.margin)}</td></tr>`).join('')}
                 </tbody></table></div>
                 <div class="two-columns">
                     <div class="detail-section"><div class="detail-title">🏆 Самые популярные товары</div><table class="detail-table"><thead><tr><th>#</th><th>Товар</th><th>Тип</th><th class="text-right">Продано, шт</th></tr></thead><tbody>
@@ -3561,6 +3589,49 @@
             });
         }
 
+        // Функция для получения наибольшей скидки для товара
+        function getBestDiscountForItem(idx, originalPrice, qty, subtotal) {
+            let finalPrice = originalPrice;
+            let discountPercent = 0;
+            
+            // Сначала скидка на конкретный товар
+            if (itemDiscounts[idx]) {
+                const disc = itemDiscounts[idx];
+                if (disc.type === 'percent') {
+                    finalPrice = originalPrice * (1 - disc.value / 100);
+                    discountPercent = disc.value;
+                } else if (disc.type === 'fixed') {
+                    const discountPerItem = disc.value;
+                    finalPrice = Math.max(0, originalPrice - discountPerItem);
+                    discountPercent = ((originalPrice - finalPrice) / originalPrice) * 100;
+                }
+            }
+            
+            // Затем скидка на всю корзину (если она больше)
+            if (cartDiscount.type !== 'none' && cartDiscount.value > 0) {
+                let cartDiscountedPrice = originalPrice;
+                let cartDiscountPercent = 0;
+                
+                if (cartDiscount.type === 'percent') {
+                    cartDiscountedPrice = originalPrice * (1 - cartDiscount.value / 100);
+                    cartDiscountPercent = cartDiscount.value;
+                } else if (cartDiscount.type === 'fixed' && subtotal > 0) {
+                    const ratio = (originalPrice * qty) / subtotal;
+                    const discountPerItem = (cartDiscount.value * ratio) / qty;
+                    cartDiscountedPrice = Math.max(0, originalPrice - discountPerItem);
+                    cartDiscountPercent = ((originalPrice - cartDiscountedPrice) / originalPrice) * 100;
+                }
+                
+                // Выбираем наибольшую скидку
+                if (cartDiscountPercent > discountPercent) {
+                    finalPrice = cartDiscountedPrice;
+                    discountPercent = cartDiscountPercent;
+                }
+            }
+            
+            return { price: finalPrice, discountPercent: Math.round(discountPercent) };
+        }
+
         function updateCartUI() {
             const totalPositiveCount = Object.values(cart).reduce((a, b) => a + (b > 0 ? b : 0), 0);
             const cartCountSpan = document.getElementById('cartCount');
@@ -3569,13 +3640,19 @@
             const cartTotalDiv = document.getElementById('cart-total');
             const cartActionsDiv = document.getElementById('cart-actions');
             const discountPanel = document.getElementById('discount-panel');
+            
             if (!cartItemsDiv) return;
             const hasAny = Object.keys(cart).length > 0;
+            
+            // Показываем/скрываем панель скидок
+            if (discountPanel) {
+                discountPanel.style.display = hasAny ? 'block' : 'none';
+            }
+            
             if (!hasAny) {
                 cartItemsDiv.innerHTML = '<div class="empty-cart">🍌 Корзина пуста</div>';
                 if (cartTotalDiv) cartTotalDiv.style.display = 'none';
                 if (cartActionsDiv) cartActionsDiv.style.display = 'none';
-                if (discountPanel) discountPanel.innerHTML = '';
                 updateCartBadges();
                 return;
             }
@@ -3592,14 +3669,15 @@
                             <div class="discount-group-title">Скидка на всю корзину</div>
                             <div class="discount-row">
                                 <div class="discount-custom-select">
-                                    <div class="discount-custom-select-trigger" id="cartDiscountSelectTrigger" onclick="event.stopPropagation(); toggleCartDiscountSelect()">${cartDiscount.type === 'percent' ? '%' : '₽'}</div>
+                                    <div class="discount-custom-select-trigger" id="cartDiscountSelectTrigger" onclick="event.stopPropagation(); toggleCartDiscountSelect()">${cartDiscount.type === 'none' ? 'Без скидки' : (cartDiscount.type === 'percent' ? '%' : '₽')}</div>
                                     <div class="discount-custom-select-dropdown" id="cartDiscountSelectDropdown">
+                                        <div class="discount-select-option" onclick="selectCartDiscountType('none', 'Без скидки')">Без скидки</div>
                                         <div class="discount-select-option" onclick="selectCartDiscountType('percent', '%')">%</div>
                                         <div class="discount-select-option" onclick="selectCartDiscountType('fixed', '₽')">₽</div>
                                     </div>
                                 </div>
                                 <div class="discount-amount-control">
-                                    <input type="number" id="cartDiscountValue" class="discount-amount-input" value="${cartDiscount.value}" onchange="updateCartDiscountFromInput()" step="${cartDiscount.type === 'percent' ? 1 : 100}">
+                                    <input type="number" id="cartDiscountValue" class="discount-amount-input" value="${cartDiscount.value}" onchange="updateCartDiscountFromInput()" step="${cartDiscount.type === 'percent' ? 1 : 100}" ${cartDiscount.type === 'none' ? 'disabled' : ''}>
                                     <button class="discount-step-btn" onclick="changeDiscountValue(-1)">−</button>
                                     <button class="discount-step-btn" onclick="changeDiscountValue(1)">+</button>
                                 </div>
@@ -3624,9 +3702,9 @@
                         </div>
 
                         <div class="discount-buttons-row">
-                            <button class="discount-action-btn apply-btn" onclick="applyItemDiscount()">Применить</button>
+                            <button class="discount-action-btn apply-btn" onclick="applyDiscount()">Применить</button>
                             <button class="discount-action-btn cancel-btn" onclick="closeDiscountPanel()">Отмена</button>
-                            <button class="discount-action-btn reset-btn" onclick="resetCartDiscount()">Сбросить скидки</button>
+                            <button class="discount-action-btn reset-btn" onclick="resetCartDiscount(); resetItemDiscounts();">Сбросить скидки</button>
                         </div>
                     </div>
                 </div>
@@ -3636,6 +3714,7 @@
             const activeRules = checkRulesForCart();
             let total = 0;
             let html = '';
+            
             if (activeRules.length > 0) {
                 html += `<div style="background: var(--badge-bg); border-radius: 16px; padding: 12px; margin-bottom: 16px; border-left: 4px solid var(--btn-bg);">
                             <div style="font-size: 13px; font-weight: bold; margin-bottom: 8px; color: var(--badge-text);">✨ Активные правила ✨</div>`;
@@ -3659,26 +3738,17 @@
                 const idx = parseInt(idxStr);
                 const card = originalCardsData[idx];
                 if (!card) continue;
-                let price = card.price;
-                if (itemDiscounts[idx]) {
-                    const disc = itemDiscounts[idx];
-                    if (disc.type === 'percent') price = card.price * (1 - disc.value / 100);
-                    else if (disc.type === 'fixed') price = Math.max(0, card.price - disc.value);
-                }
-                let itemTotal = price * qty;
-                if (cartDiscount.type === 'percent' && cartDiscount.value > 0) itemTotal = itemTotal * (1 - cartDiscount.value / 100);
-                else if (cartDiscount.type === 'fixed' && cartDiscount.value > 0 && subtotal > 0) {
-                    const ratio = (card.price * qty) / subtotal;
-                    itemTotal = itemTotal - (cartDiscount.value * ratio);
-                    if (itemTotal < 0) itemTotal = 0;
-                }
+                
+                const best = getBestDiscountForItem(idx, card.price, qty, subtotal);
+                const itemTotal = best.price * qty;
                 total += itemTotal;
                 const isZero = qty === 0;
+                
                 html += `<div class="cart-item ${isZero ? 'disabled' : ''}">
                             <div class="cart-item-info">
                                 <div class="cart-item-name">${escapeHtml(card.name)}</div>
                                 <div class="cart-item-price">${card.price} ₽ × ${qty} = ${itemTotal.toFixed(2)} ₽</div>
-                                ${price !== card.price ? `<div style="font-size: 11px; color: var(--profit-positive);">Скидка: ${((card.price - price) / card.price * 100).toFixed(0)}%</div>` : ''}
+                                ${best.discountPercent > 0 ? `<div style="font-size: 11px; color: var(--profit-positive);">Скидка: ${best.discountPercent}%</div>` : ''}
                             </div>
                             <div class="cart-item-quantity">
                                 <button class="cart-qty-btn" onclick="changeCartQty(${idx}, -1)" ${isZero ? 'disabled' : ''}>−</button>
@@ -3739,10 +3809,7 @@
 
         function clearCart() {
             cart = {};
-            cartDiscount = {
-                type: 'percent',
-                value: 10
-            };
+            cartDiscount = { type: 'none', value: 0 };
             itemDiscounts = {};
             selectedDiscountProducts.clear();
             updateCartUI();
@@ -3765,7 +3832,6 @@
         function closeCartModal() {
             const modal = document.getElementById('cartModal');
             if (modal) modal.style.display = 'none';
-            closeDiscountPanel();
         }
 
         async function updateStock(index, delta, silent = false) {
@@ -3810,15 +3876,30 @@
                 showToast("Нет товаров для продажи", false);
                 return;
             }
+            
             let subtotal = 0;
             for (const [idxStr, qty] of items) {
                 const idx = parseInt(idxStr);
                 const card = originalCardsData[idx];
                 subtotal += qty * card.price;
             }
+            
             let total = subtotal;
-            if (cartDiscount.type === 'percent' && cartDiscount.value > 0) total = subtotal * (1 - cartDiscount.value / 100);
-            else if (cartDiscount.type === 'fixed' && cartDiscount.value > 0) total = Math.max(0, subtotal - cartDiscount.value);
+            if (cartDiscount.type === 'percent' && cartDiscount.value > 0) {
+                total = subtotal * (1 - cartDiscount.value / 100);
+            } else if (cartDiscount.type === 'fixed' && cartDiscount.value > 0) {
+                total = Math.max(0, subtotal - cartDiscount.value);
+            }
+            
+            // Также применяем скидки на отдельные товары
+            let finalTotal = 0;
+            for (const [idxStr, qty] of items) {
+                const idx = parseInt(idxStr);
+                const card = originalCardsData[idx];
+                const best = getBestDiscountForItem(idx, card.price, qty, subtotal);
+                finalTotal += best.price * qty;
+            }
+            total = finalTotal;
 
             for (const [idxStr, qty] of items) {
                 const idx = parseInt(idxStr);
@@ -3850,10 +3931,7 @@
             const cartCopy = { ...cart };
             closeCartModal();
             cart = {};
-            cartDiscount = {
-                type: 'percent',
-                value: 10
-            };
+            cartDiscount = { type: 'none', value: 0 };
             itemDiscounts = {};
             selectedDiscountProducts.clear();
             updateCartUI();
