@@ -3594,19 +3594,21 @@
 
         function getBestDiscountForItem(idx, originalPrice, qty, subtotal) {
             let finalPrice = originalPrice;
-            let discountPercent = 0;
+            let discountValue = 0;
+            let discountType = null;
             if (itemDiscounts[idx]) {
                 const disc = itemDiscounts[idx];
+                discountType = disc.type;
                 if (disc.type === 'percent') {
                     finalPrice = originalPrice * (1 - disc.value / 100);
-                    discountPercent = disc.value;
+                    discountValue = disc.value;
                 } else if (disc.type === 'fixed') {
                     const discountPerItem = disc.value;
                     finalPrice = Math.max(0, originalPrice - discountPerItem);
-                    discountPercent = ((originalPrice - finalPrice) / originalPrice) * 100;
+                    discountValue = discountPerItem;
                 }
             }
-            return { price: finalPrice, discountPercent: Math.round(discountPercent) };
+            return { price: finalPrice, discountValue: discountValue, discountType: discountType };
         }
 
         function updateCartUI() {
@@ -3704,16 +3706,25 @@
                 const discountedItemTotal = best.price * qty;
                 total += discountedItemTotal;
                 const isZero = qty === 0;
-                const hasDiscount = best.discountPercent > 0;
+                const hasDiscount = best.discountValue > 0;
+
+                let discountText = '';
+                if (hasDiscount) {
+                    if (best.discountType === 'percent') {
+                        discountText = `<div style="font-size: 11px; color: var(--profit-positive);">Скидка: ${best.discountValue}%</div>`;
+                    } else if (best.discountType === 'fixed') {
+                        discountText = `<div style="font-size: 11px; color: var(--profit-positive);">Скидка: ${best.discountValue * qty} ₽</div>`;
+                    }
+                }
 
                 html += `<div class="cart-item ${isZero ? 'disabled' : ''}">
                             <div class="cart-item-info">
                                 <div class="cart-item-name">${escapeHtml(card.name)}</div>
                                 <div class="cart-item-price">
-                                    ${hasDiscount ? `<span class="strikethrough">${originalItemTotal.toFixed(2)} ₽</span>` : ''}
-                                    ${discountedItemTotal.toFixed(2)} ₽
+                                    ${card.price} ₽ × ${qty} = 
+                                    ${hasDiscount ? `<span class="strikethrough">${originalItemTotal.toFixed(2)} ₽</span> ${discountedItemTotal.toFixed(2)} ₽` : `${originalItemTotal.toFixed(2)} ₽`}
                                 </div>
-                                ${hasDiscount ? `<div style="font-size: 11px; color: var(--profit-positive);">Скидка: ${best.discountPercent}%</div>` : ''}
+                                ${discountText}
                             </div>
                             <div class="cart-item-quantity">
                                 <button class="cart-qty-btn" onclick="changeCartQty(${idx}, -1)" ${isZero ? 'disabled' : ''}>−</button>
@@ -3728,7 +3739,10 @@
                 cartTotalDiv.style.display = 'block';
                 const hasAnyDiscount = Object.values(itemDiscounts).length > 0;
                 if (hasAnyDiscount) {
-                    cartTotalDiv.innerHTML = `<span class="strikethrough">${subtotal.toFixed(2)} ₽</span> ${Math.max(0, total).toFixed(2)} ₽`;
+                    let discountTotalInfo = '';
+                    let totalDiscountRub = subtotal - total;
+                    discountTotalInfo = ` (скидка ${totalDiscountRub.toFixed(2)} ₽)`;
+                    cartTotalDiv.innerHTML = `<span class="strikethrough">${subtotal.toFixed(2)} ₽</span> ${Math.max(0, total).toFixed(2)} ₽${discountTotalInfo}`;
                 } else {
                     cartTotalDiv.innerHTML = `🍌 Итого: ${Math.max(0, total).toFixed(2)} ₽`;
                 }
